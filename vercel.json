@@ -1,4 +1,4 @@
-here{
+{
   "functions": {
     "api/**/*.js": {
       "memory": 512,
