@@ -1,5 +1,11 @@
-{
+here{
+  "functions": {
+    "api/**/*.js": {
+      "memory": 512,
+      "maxDuration": 300
+    }
+  },
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.js" }
+    { "source": "/ws", "destination": "/api/ws" }
   ]
 }
