@@ -1,4 +1,4 @@
-// index.js - Myra Backend Proxy Engine
+// index.js - Myra Backend Proxy Engine (Updated 2026)
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
@@ -18,7 +18,8 @@ app.post('/api/myra', async (req, res) => {
         return res.status(400).json({ error: 'API key missing' });
     }
 
-    const endpointURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
+    // 🔥 LATEST UPDATE: Gemini 2.0 Flash Model Endpoint
+    const endpointURL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
     let partsPayload = [];
     if (isAuto) {
@@ -45,9 +46,17 @@ app.post('/api/myra', async (req, res) => {
 
         const data = await response.json();
         
-        // Extract PCM audio and text response safely
+        console.log("Gemini Raw Response Received");
+
+        // Safety check if model or key fails
+        if (!data.candidates || !data.candidates[0].content) {
+            console.error("Gemini Error Context:", JSON.stringify(data));
+            return res.status(500).json({ error: 'Invalid API Key or Gemini Response Crash' });
+        }
+        
+        // Extract Text and Audio Response safely
         const textPart = data.candidates[0].content.parts.find(p => p.text);
-        const audioPart = data.candidates[0].content.parts.find(p => p.inlineData && p.inlineData.mimeType.startsWith("audio/pcm"));
+        const audioPart = data.candidates[0].content.parts.find(p => p.inlineData && p.inlineData.mimeType.startsWith("audio/"));
 
         res.json({
             text: textPart ? textPart.text : "",
@@ -55,6 +64,7 @@ app.post('/api/myra', async (req, res) => {
         });
 
     } catch (error) {
+        console.error("Server Catch Error:", error);
         res.status(500).json({ error: 'Gemini API Connection Error' });
     }
 });
