@@ -1,10 +1,15 @@
-{
+here{
   "name": "myra-backend",
   "version": "1.0.0",
-  "main": "index.js",
+  "description": "Myra AI - WebSocket proxy for Gemini live audio",
+  "main": "api/ws.js",
+  "scripts": {
+    "start": "vercel dev"
+  },
   "dependencies": {
-    "cors": "^2.8.5",
-    "express": "^4.19.2",
-    "node-fetch": "^2.7.0"
+    "ws": "^8.13.0"
+  },
+  "engines": {
+    "node": ">=18.x"
   }
 }
